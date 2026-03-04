@@ -447,6 +447,48 @@
     color: var(--ink);
   }
 
+  /* ---- DISCOUNT ---- */
+  .discount-section {
+    margin-bottom: 24px;
+  }
+
+  .discount-apply-btn {
+    padding: 14px 24px;
+    background: none;
+    border: 1px solid var(--ink);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--ink);
+  }
+
+  .discount-apply-btn:hover {
+    background: var(--ink);
+    color: var(--warm-white);
+  }
+
+  .discount-msg {
+    margin-top: 8px;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .discount-msg.success { color: var(--success); }
+  .discount-msg.error { color: #8b4040; }
+
+  .cart-discount {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 16px;
+    color: var(--success);
+    font-style: italic;
+  }
+
   /* ---- SUCCESS STATE ---- */
   .order-success {
     text-align: center;
@@ -629,14 +671,14 @@
 
   <div class="menu-grid">
 
-    <div class="menu-item" data-id="whole" data-price="12">
+    <div class="menu-item" data-id="whole" data-price="10">
       <div class="item-info">
         <div class="item-name">Sourdough Loaf — Whole</div>
         <div class="item-desc">Classic naturally leavened sourdough, crisp crust, open crumb</div>
         <div class="item-weight">36 oz · Flour, water, starter, Himalayan sea salt</div>
       </div>
       <div class="item-right">
-        <div class="item-price">$12</div>
+        <div class="item-price">$10</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="changeQty('whole', -1)">−</button>
           <div class="qty-value" id="qty-whole">0</div>
@@ -665,7 +707,7 @@
       <div class="item-info">
         <div class="item-name">Sourdough Bagels</div>
         <div class="item-desc">Chewy, tangy, boiled &amp; baked — sold by the half dozen</div>
-        <div class="item-weight">6 ct · Flour, water, starter, Himalayan sea salt</div>
+        <div class="item-weight">6 ct · Flour, water, starter, active yeast, Himalayan sea salt</div>
       </div>
       <div class="item-right">
         <div class="item-price">$10</div>
@@ -681,7 +723,7 @@
       <div class="item-info">
         <div class="item-name">Sourdough Pizza Dough</div>
         <div class="item-desc">Ready to stretch, top, and bake — makes one large pizza</div>
-        <div class="item-weight">~24 oz ball · Flour, water, starter, olive oil, Himalayan sea salt</div>
+        <div class="item-weight">~24 oz ball · Flour, water, starter, active yeast, olive oil, Himalayan sea salt</div>
       </div>
       <div class="item-right">
         <div class="item-price">$8</div>
@@ -689,6 +731,22 @@
           <button class="qty-btn" onclick="changeQty('pizza', -1)">−</button>
           <div class="qty-value" id="qty-pizza">0</div>
           <button class="qty-btn" onclick="changeQty('pizza', 1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-id="croissants" data-price="12">
+      <div class="item-info">
+        <div class="item-name">Sourdough Croissants</div>
+        <div class="item-desc">Buttery, flaky, laminated with sourdough tang — sold by the half dozen</div>
+        <div class="item-weight">6 ct · Flour, water, starter, butter, sugar, Himalayan sea salt</div>
+      </div>
+      <div class="item-right">
+        <div class="item-price">$12</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('croissants', -1)">−</button>
+          <div class="qty-value" id="qty-croissants">0</div>
+          <button class="qty-btn" onclick="changeQty('croissants', 1)">+</button>
         </div>
       </div>
     </div>
@@ -710,6 +768,16 @@
         <span>Total</span>
         <span id="cart-total-amount">$0</span>
       </div>
+    </div>
+
+    <!-- Discount Code -->
+    <div class="discount-section" id="discount-section">
+      <div class="form-label" style="margin-bottom: 8px;">Discount Code</div>
+      <div style="display: flex; gap: 8px;">
+        <input class="form-input" type="text" id="discount-code" placeholder="Enter code" style="flex: 1; text-transform: uppercase;">
+        <button class="discount-apply-btn" onclick="applyDiscount()">Apply</button>
+      </div>
+      <div id="discount-msg" class="discount-msg"></div>
     </div>
 
     <!-- Pickup Info -->
@@ -778,14 +846,43 @@
 
 <script>
   // ---- STATE ----
-  const cart = { whole: 0, half: 0, bagels: 0, pizza: 0 };
-  const prices = { whole: 12, half: 7, bagels: 10, pizza: 8 };
+  const cart = { whole: 0, half: 0, bagels: 0, pizza: 0, croissants: 0 };
+  const prices = { whole: 10, half: 7, bagels: 10, pizza: 8, croissants: 12 };
   const names = {
     whole: 'Sourdough Loaf — Whole',
     half: 'Sourdough Loaf — Half',
     bagels: 'Sourdough Bagels (6ct)',
-    pizza: 'Pizza Dough'
+    pizza: 'Pizza Dough',
+    croissants: 'Sourdough Croissants (6ct)'
   };
+
+  // ---- DISCOUNT CODES ----
+  // Change these codes to whatever you want!
+  const discountCodes = {
+    'HEROES': { percent: 10, label: 'First Responder Discount (10% off)' },
+    'SENIOR55': { percent: 10, label: 'Senior Discount (10% off)' },
+    'FIRSTRESPONDER': { percent: 10, label: 'First Responder Discount (10% off)' },
+    'THANKYOU': { percent: 10, label: 'First Responder / Senior Discount (10% off)' }
+  };
+  let activeDiscount = null;
+
+  function applyDiscount() {
+    const input = document.getElementById('discount-code');
+    const msg = document.getElementById('discount-msg');
+    const code = input.value.trim().toUpperCase();
+
+    if (discountCodes[code]) {
+      activeDiscount = { code, ...discountCodes[code] };
+      msg.textContent = '✓ ' + discountCodes[code].label;
+      msg.className = 'discount-msg success';
+      input.disabled = true;
+    } else {
+      activeDiscount = null;
+      msg.textContent = 'Invalid code. Please try again.';
+      msg.className = 'discount-msg error';
+    }
+    updateCart();
+  }
 
   // ---- QUANTITY ----
   function changeQty(id, delta) {
@@ -802,14 +899,14 @@
     const submitBtn = document.getElementById('submit-btn');
 
     let html = '';
-    let total = 0;
+    let subtotal = 0;
     let hasItems = false;
 
     for (const [id, qty] of Object.entries(cart)) {
       if (qty > 0) {
         hasItems = true;
         const lineTotal = qty * prices[id];
-        total += lineTotal;
+        subtotal += lineTotal;
         html += `<div class="cart-line">
           <span>${names[id]} × ${qty}</span>
           <span>$${lineTotal}</span>
@@ -817,10 +914,21 @@
       }
     }
 
+    // Apply discount
+    let total = subtotal;
+    if (activeDiscount && hasItems) {
+      const savings = Math.round(subtotal * activeDiscount.percent / 100 * 100) / 100;
+      total = subtotal - savings;
+      html += `<div class="cart-discount">
+        <span>${activeDiscount.label}</span>
+        <span>−$${savings.toFixed(2)}</span>
+      </div>`;
+    }
+
     linesEl.innerHTML = html;
     emptyEl.style.display = hasItems ? 'none' : 'block';
     totalEl.style.display = hasItems ? 'flex' : 'none';
-    totalAmt.textContent = '$' + total;
+    totalAmt.textContent = '$' + total.toFixed(2);
     submitBtn.disabled = !hasItems;
   }
 
@@ -877,7 +985,10 @@
       date ? `Pickup: ${date}` : '',
       '',
       ...orderLines,
-      `TOTAL: $${total}`,
+      '',
+      `SUBTOTAL: $${total}`,
+      activeDiscount ? `DISCOUNT (${activeDiscount.code}): -${activeDiscount.percent}%` : '',
+      activeDiscount ? `TOTAL: $${(total * (1 - activeDiscount.percent / 100)).toFixed(2)}` : `TOTAL: $${total}`,
       notes ? `\nNotes: ${notes}` : ''
     ].filter(Boolean).join('\n');
 
