@@ -690,7 +690,7 @@
 
 <!-- ======== ABOUT ======== -->
 <section id="about">
-  <p class="section-title">Our Bread</p>
+  <p class="section-title">My Bread</p>
   <div class="divider"></div>
   <p class="about-text">
     Real sourdough, made the slow way. Every loaf is hand shaped, naturally leavened, 
@@ -767,6 +767,24 @@
       </div>
     </div>
 
+    <div class="menu-item" data-id="bowls" data-price="10">
+      <!-- <img class="item-img" src="YOUR-IMAGE-URL" alt="Sourdough bread bowls"> -->
+      <div class="item-info">
+        <div class="item-name">Sourdough Bread Bowls (4)</div>
+        <div class="item-desc">Same beautiful loaf, mini size. Perfect for soup!</div>
+        <div class="item-weight">18 oz · Flour, water, starter, Himalayan sea salt</div>
+        <div class="item-allergen">Allergens: Wheat</div>
+      </div>
+      <div class="item-right">
+        <div class="item-price">$10</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('bowls', -1)">−</button>
+          <div class="qty-value" id="qty-bowls">0</div>
+          <button class="qty-btn" onclick="changeQty('bowls', 1)">+</button>
+        </div>
+      </div>
+    </div>
+    
     <div class="menu-item" data-id="bagels-plain" data-price="10">
       <!-- <img class="item-img" src="YOUR-IMAGE-URL" alt="Sourdough plain bagels"> -->
       <div class="item-info">
@@ -861,7 +879,7 @@
     <!-- Discount Code -->
     <div class="discount-section" id="discount-section">
       <div class="discount-banner">
-        I proudly offer <strong>50% off of sourdough whole, half loaves and bagels </strong> for military, first responders, and seniors (55+). Enter your discount code at checkout.
+        I proudly offer <strong>50% off of sourdough whole, half loaves,.bread bowls and bagels </strong> for military, first responders, and seniors (55+). Enter your discount code at checkout.
       </div>
       <div class="form-label" style="margin-bottom: 8px;">Discount Code</div>
       <div style="display: flex; gap: 8px;">
@@ -947,11 +965,12 @@
 
 <script>
   // ---- STATE ----
-  const cart = { whole: 0, half: 0, 'bagels-plain': 0, 'bagels-everything': 0, pizza: 0, croissants: 0 };
-  const prices = { whole: 10, half: 7, 'bagels-plain': 10, 'bagels-everything': 10, pizza: 8, croissants: 12 };
+  const cart = { whole: 0, half: 0, bowls: 0, 'bagels-plain': 0, 'bagels-everything': 0, pizza: 0, croissants: 0 };
+  const prices = { whole: 10, half: 7, bowls: 10,'bagels-plain': 10, 'bagels-everything': 10, pizza: 8, croissants: 12 };
   const names = {
     whole: 'Sourdough Loaf — Whole',
     half: 'Sourdough Loaf — Half',
+    bowls: 'Sourdough Bowls (4)',
     'bagels-plain': 'Bagels — Plain (6ct)',
     'bagels-everything': 'Bagels — Everything (6ct)',
     pizza: 'Pizza Dough',
