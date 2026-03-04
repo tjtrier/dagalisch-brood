@@ -704,7 +704,7 @@
     </div>
     <div class="about-detail">
       <div class="about-detail-label">Ingredients</div>
-      <div class="about-detail-value">Flour</div>
+      <div class="about-detail-value">Four</div>
     </div>
     <div class="about-detail">
       <div class="about-detail-label">Location</div>
@@ -720,11 +720,10 @@
 <!-- ======== MENU ======== -->
 <section id="menu">
   <p class="section-title">Menu</p>
-  <p class="section-subtitle">What I Bake</p>
+  <p class="section-subtitle">What We Bake</p>
 
   <div class="order-notice">
-    <strong>Please Note:</strong> Croissants and large orders (6+ items) require at least 24 hours advance notice. I bake everything fresh to order, and 
-    have a limited number of loaves a day. First come first serve without pre-ordering!
+    <strong>Please Note:</strong> Croissants and large orders (6+ items) require at least 24 hours advance notice. We bake everything fresh to order.
   </div>
 
   <div class="menu-grid">
@@ -807,7 +806,7 @@
       <div class="item-info">
         <div class="item-name">Sourdough Pizza Dough</div>
         <div class="item-desc">Ready to stretch, top, and bake — makes one large pizza</div>
-        <div class="item-weight">~24 oz ball · Flour, water, starter, active yeast, olive oil, cornmeal, Himalayan sea salt</div>
+        <div class="item-weight">~24 oz ball · Flour, water, starter, active yeast, olive oil, Himalayan sea salt</div>
         <div class="item-allergen">Allergens: Wheat</div>
       </div>
       <div class="item-right">
@@ -860,7 +859,7 @@
     <!-- Discount Code -->
     <div class="discount-section" id="discount-section">
       <div class="discount-banner">
-        I proudly offer <strong>50% off</strong> for military, first responders, and seniors (55+). Enter your discount code at checkout.
+        We proudly offer <strong>50% off</strong> for military, first responders, and seniors (55+). Enter your discount code at checkout.
       </div>
       <div class="form-label" style="margin-bottom: 8px;">Discount Code</div>
       <div style="display: flex; gap: 8px;">
@@ -873,7 +872,7 @@
     <!-- Pickup Info -->
     <div class="pickup-info">
       <p><strong>Pickup Location:</strong> 9750 E Jennings Dr #108, Traverse City, MI 49684</p>
-      <p><strong>How it works:</strong> Place your order below.I will confirm availability and your pickup time via text or email within 24 hours. Payment is collected at pickup.</p>
+      <p><strong>How it works:</strong> Place your order below. We'll confirm availability and your pickup time via text or email within 24 hours. Payment is collected at pickup.</p>
     </div>
 
     <!-- Order Form -->
@@ -902,7 +901,7 @@
 
     <div class="form-group">
       <label class="form-label" for="notes">Notes</label>
-      <textarea class="form-textarea" id="notes" placeholder="Anything I should know?"></textarea>
+      <textarea class="form-textarea" id="notes" placeholder="Anything we should know? Slicing preferences, etc."></textarea>
     </div>
 
     <button class="submit-btn" id="submit-btn" onclick="submitOrder()" disabled>
@@ -914,7 +913,7 @@
   <div class="order-success" id="order-success">
     <h3>Order Received!</h3>
     <p>
-      Thank you! I will confirm your order and pickup time shortly via text or email.
+      Thank you! We'll confirm your order and pickup time shortly via text or email.
       <br>See you soon.
     </p>
   </div>
@@ -1031,7 +1030,8 @@
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const today = new Date();
 
-    for (let i = 1; i <= 14; i++) {
+    // Start from 2 days out (skip tomorrow entirely)
+    for (let i = 2; i <= 14; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
       const opt = document.createElement('option');
@@ -1055,7 +1055,7 @@
     let hasItems = Object.values(cart).some(q => q > 0);
     if (!hasItems) return;
 
-    // Build order summary for mailto / SMS fallback
+    // Build order summary
     let orderLines = [];
     let total = 0;
     for (const [id, qty] of Object.entries(cart)) {
@@ -1070,51 +1070,52 @@
     const date = document.getElementById('pickup-date').value;
     const notes = document.getElementById('notes').value.trim();
 
-    const summary = [
-      `NEW ORDER from ${name}`,
-      `Phone: ${phone}`,
-      email ? `Email: ${email}` : '',
-      date ? `Pickup: ${date}` : '',
-      '',
-      ...orderLines,
-      '',
-      `SUBTOTAL: $${total}`,
-      activeDiscount ? `DISCOUNT (${activeDiscount.code}): -${activeDiscount.percent}%` : '',
-      activeDiscount ? `TOTAL: $${(total * (1 - activeDiscount.percent / 100)).toFixed(2)}` : `TOTAL: $${total}`,
-      notes ? `\nNotes: ${notes}` : ''
-    ].filter(Boolean).join('\n');
+    let finalTotal = total;
+    let discountText = 'None';
+    if (activeDiscount) {
+      finalTotal = (total * (1 - activeDiscount.percent / 100)).toFixed(2);
+      discountText = `${activeDiscount.code} (${activeDiscount.percent}% off)`;
+    }
 
-    /* 
-     * ============================================
-     * PAYMENT / NOTIFICATION OPTIONS:
-     * ============================================
-     * 
-     * OPTION 1: Email notification (current default)
-     * Replace YOUR_EMAIL below with your email address.
-     * Orders get sent to your inbox.
-     *
-     * OPTION 2: Connect Stripe for online payments
-     * Replace the mailto link with a Stripe Payment Link.
-     * Create one at https://dashboard.stripe.com/payment-links
-     *
-     * OPTION 3: Use a form service like Formspree
-     * Sign up at formspree.io, get your endpoint,
-     * and POST the form data there instead.
-     *
-     * OPTION 4: Venmo/Cash App
-     * Show your Venmo/Cash App QR or link after submit.
-     * ============================================
-     */
+    const orderSummary = orderLines.join('\n');
 
-    // Default: open email with order summary
-    const mailTo = 'dagalischbrood@gmail.com'; // ← CHANGE THIS
-    const subject = encodeURIComponent(`Dagalisch Brood Order — ${name}`);
-    const body = encodeURIComponent(summary);
-    window.location.href = `mailto:${mailTo}?subject=${subject}&body=${body}`;
+    // Disable button while sending
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'SENDING...';
 
-    // Show success
-    document.getElementById('order-form-wrapper').style.display = 'none';
-    document.getElementById('order-success').style.display = 'block';
+    // Send to Formspree
+    fetch('https://formspree.io/f/mkovdrgz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        email: email || 'Not provided',
+        pickup_date: date || 'Not selected',
+        order: orderSummary,
+        subtotal: '$' + total,
+        discount: discountText,
+        total: '$' + finalTotal,
+        notes: notes || 'None',
+        _subject: 'New Dagalisch Brood Order from ' + name
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        document.getElementById('order-form-wrapper').style.display = 'none';
+        document.getElementById('order-success').style.display = 'block';
+      } else {
+        alert('There was a problem submitting your order. Please try again or text/call us directly.');
+        btn.disabled = false;
+        btn.textContent = 'SUBMIT ORDER';
+      }
+    })
+    .catch(error => {
+      alert('There was a problem submitting your order. Please try again or text/call us directly.');
+      btn.disabled = false;
+      btn.textContent = 'SUBMIT ORDER';
+    });
   }
 </script>
 
