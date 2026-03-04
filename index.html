@@ -651,11 +651,11 @@
     </div>
     <div class="about-detail">
       <div class="about-detail-label">Ingredients</div>
-      <div class="about-detail-value">Four</div>
+      <div class="about-detail-value">Flour</div>
     </div>
     <div class="about-detail">
       <div class="about-detail-label">Allergens</div>
-      <div class="about-detail-value">Wheat</div>
+      <div class="about-detail-value">Wheat, Sesame*</div>
     </div>
     <div class="about-detail">
       <div class="about-detail-label">Batch Size</div>
@@ -703,18 +703,34 @@
       </div>
     </div>
 
-    <div class="menu-item" data-id="bagels" data-price="10">
+    <div class="menu-item" data-id="bagels-plain" data-price="10">
       <div class="item-info">
-        <div class="item-name">Sourdough Bagels</div>
+        <div class="item-name">Sourdough Bagels — Plain</div>
         <div class="item-desc">Chewy, tangy, boiled &amp; baked — sold by the half dozen</div>
         <div class="item-weight">6 ct · Flour, water, starter, active yeast, Himalayan sea salt</div>
       </div>
       <div class="item-right">
         <div class="item-price">$10</div>
         <div class="qty-control">
-          <button class="qty-btn" onclick="changeQty('bagels', -1)">−</button>
-          <div class="qty-value" id="qty-bagels">0</div>
-          <button class="qty-btn" onclick="changeQty('bagels', 1)">+</button>
+          <button class="qty-btn" onclick="changeQty('bagels-plain', -1)">−</button>
+          <div class="qty-value" id="qty-bagels-plain">0</div>
+          <button class="qty-btn" onclick="changeQty('bagels-plain', 1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-id="bagels-everything" data-price="10">
+      <div class="item-info">
+        <div class="item-name">Sourdough Bagels — Everything</div>
+        <div class="item-desc">Chewy, tangy, boiled &amp; baked, loaded with everything seasoning — sold by the half dozen</div>
+        <div class="item-weight">6 ct · Flour, water, starter, active yeast, Himalayan sea salt, sesame seeds, salt, dehydrated garlic, dehydrated onion, black sesame seeds, poppy seeds</div>
+      </div>
+      <div class="item-right">
+        <div class="item-price">$10</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('bagels-everything', -1)">−</button>
+          <div class="qty-value" id="qty-bagels-everything">0</div>
+          <button class="qty-btn" onclick="changeQty('bagels-everything', 1)">+</button>
         </div>
       </div>
     </div>
@@ -846,12 +862,13 @@
 
 <script>
   // ---- STATE ----
-  const cart = { whole: 0, half: 0, bagels: 0, pizza: 0, croissants: 0 };
-  const prices = { whole: 10, half: 7, bagels: 10, pizza: 8, croissants: 12 };
+  const cart = { whole: 0, half: 0, 'bagels-plain': 0, 'bagels-everything': 0, pizza: 0, croissants: 0 };
+  const prices = { whole: 10, half: 7, 'bagels-plain': 10, 'bagels-everything': 10, pizza: 8, croissants: 12 };
   const names = {
     whole: 'Sourdough Loaf — Whole',
     half: 'Sourdough Loaf — Half',
-    bagels: 'Sourdough Bagels (6ct)',
+    'bagels-plain': 'Bagels — Plain (6ct)',
+    'bagels-everything': 'Bagels — Everything (6ct)',
     pizza: 'Pizza Dough',
     croissants: 'Sourdough Croissants (6ct)'
   };
@@ -859,10 +876,11 @@
   // ---- DISCOUNT CODES ----
   // Change these codes to whatever you want!
   const discountCodes = {
-    'HEROES': { percent: 10, label: 'First Responder Discount (10% off)' },
-    'SENIOR55': { percent: 10, label: 'Senior Discount (10% off)' },
-    'FIRSTRESPONDER': { percent: 10, label: 'First Responder Discount (10% off)' },
-    'THANKYOU': { percent: 10, label: 'First Responder / Senior Discount (10% off)' }
+    'HEROES': { percent: 50, label: 'First Responder / Military Discount (50% off)' },
+    'SENIOR55': { percent: 50, label: 'Senior Discount (50% off)' },
+    'FIRSTRESPONDER': { percent: 50, label: 'First Responder Discount (50% off)' },
+    'MILITARY': { percent: 50, label: 'Military Discount (50% off)' },
+    'THANKYOU': { percent: 50, label: 'First Responder / Military / Senior Discount (50% off)' }
   };
   let activeDiscount = null;
 
