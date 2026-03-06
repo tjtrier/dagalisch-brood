@@ -1,2 +1,2 @@
-# dagalisch-brood
-Dagalisch Brood bakery website
+# dagelijks-brood
+Dagelicks Brood bakery website
