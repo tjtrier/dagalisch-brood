@@ -769,7 +769,7 @@
       <div class="availability-count-badge" id="avail-badge"></div>
     </div>
     <div class="availability-desc" id="avail-desc"></div>
-    <a href="#order" class="availability-order-link" id="avail-link"></a>
+    <a href="#whole-loaf" class="availability-order-link" id="avail-link"></a>
   </div>
 
   <div class="order-notice">
@@ -779,7 +779,7 @@
 
   <div class="menu-grid">
 
-    <div class="menu-item" data-id="whole" data-price="10">
+    <div class="menu-item" data-id="whole" data-price="10" id="whole-loaf">
       <div class="item-info">
         <div class="item-name">Sourdough Loaf — Whole</div>
         <div class="item-desc">Classic naturally leavened sourdough, crisp crust, open crumb</div>
@@ -1065,12 +1065,10 @@
   };
 
   const discountCodes = {
-    'HEROES':         { percent: 50, label: 'First Responder / Military Discount (50% off)' },
-    'SENIOR55':       { percent: 50, label: 'Senior Discount (50% off)' },
-    'FIRSTRESPONDER': { percent: 50, label: 'First Responder Discount (50% off)' },
-    'MILITARY':       { percent: 50, label: 'Military Discount (50% off)' },
-    'FRIENDS&FAMILY':         { percent: 50, label: 'Friends & Family Discount (50% off)' },
-    'THANKYOU':       { percent: 50, label: 'First Responder / Military / Senior Discount (50% off)' }
+    'HERO50':   { percent: 50, label: 'Military / First Responder' },
+    'SENIOR50': { percent: 50, label: 'Senior Discount (50% off)' },
+    'FRIENDS50': { percent: 50, label: 'Friends & Family (50% off)' },
+    'LEGNEDS50': { percent: 50, label: 'Legends Morgan Farms (50% off)' }
   };
   let activeDiscount = null;
 
