@@ -436,10 +436,66 @@
     margin-top: 6px;
   }
 
-  .daily-tag.sold-out {
+  .daily-tag.sold-out-tag {
     background: #fdf0f0;
     border-color: #e0a0a0;
     color: #8b4040;
+  }
+
+  .daily-bake-label {
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    background: var(--alert-bg);
+    border: 1px solid var(--alert-border);
+    color: var(--alert);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .preorder-label {
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    background: #f0f4ff;
+    border: 1px solid #b0c0e8;
+    color: #3a5a9a;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .preorder-notice {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #3a5a9a;
+    margin-top: 8px;
+  }
+
+  .preorder-item {
+    border-left: 3px solid #b0c0e8;
+  }
+
+  .out-of-stock-badge {
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    background: #fdf0f0;
+    border: 1px solid #e0a0a0;
+    color: #8b4040;
+    margin-top: 8px;
   }
 
   #order { border-bottom: 1px solid var(--stone); }
@@ -769,30 +825,51 @@
       <div class="availability-count-badge" id="avail-badge"></div>
     </div>
     <div class="availability-desc" id="avail-desc"></div>
-    <a href="#whole-loaf" class="availability-order-link" id="avail-link"></a>
+    <a href="#whole-loaf-daily" class="availability-order-link" id="avail-link"></a>
   </div>
 
   <div class="order-notice">
-    <strong>Please Note:</strong> Croissants and large orders (6+ items) require at least 48 hours advance notice.
-    As I bake everything fresh to order and have a limited number of loaves per day, if you want to guarantee a product, pre-ordering is required!
+    <strong>Pre-orders:</strong> Breads &amp; bagels need at least 24 hours notice. Croissants need at least 48 hours.
+    Everything is baked fresh to order — pre-ordering guarantees your product!
   </div>
 
   <div class="menu-grid">
 
-    <div class="menu-item" data-id="whole" data-price="10" id="whole-loaf">
+    <!-- DAILY BAKE WHOLE LOAF -->
+    <div class="menu-item" data-id="whole" data-price="10" id="whole-loaf-daily">
       <div class="item-info">
-        <div class="item-name">Sourdough Loaf — Whole</div>
-        <div class="item-desc">Classic naturally leavened sourdough, crisp crust, open crumb</div>
+        <div class="item-name">Sourdough Loaf — Whole <span class="daily-bake-label">Daily Bake</span></div>
+        <div class="item-desc">Classic naturally leavened sourdough, crisp crust, open crumb — baked fresh this morning</div>
         <div class="item-weight">36 oz · Flour, water, starter, Himalayan sea salt</div>
         <div class="item-allergen">Allergens: Wheat</div>
         <div class="daily-tag" id="daily-tag-whole"></div>
       </div>
       <div class="item-right">
         <div class="item-price">$10</div>
-        <div class="qty-control">
+        <div class="qty-control" id="daily-whole-qty-control">
           <button class="qty-btn" onclick="changeQty('whole', -1)">−</button>
           <div class="qty-value" id="qty-whole">0</div>
           <button class="qty-btn" onclick="changeQty('whole', 1)" id="btn-plus-whole">+</button>
+        </div>
+        <div class="out-of-stock-badge" id="out-of-stock-whole" style="display:none;">Out of Stock Today</div>
+      </div>
+    </div>
+
+    <!-- PRE-ORDER WHOLE LOAF -->
+    <div class="menu-item preorder-item" data-id="whole-preorder" data-price="10" id="whole-loaf-preorder">
+      <div class="item-info">
+        <div class="item-name">Sourdough Loaf — Whole <span class="preorder-label">Pre-Order</span></div>
+        <div class="item-desc">Want it on a specific day? Pre-order and I'll bake it fresh for your chosen pickup date.</div>
+        <div class="item-weight">36 oz · Flour, water, starter, Himalayan sea salt</div>
+        <div class="item-allergen">Allergens: Wheat</div>
+        <div class="preorder-notice">📅 Select your pickup date below — minimum 24 hours notice required</div>
+      </div>
+      <div class="item-right">
+        <div class="item-price">$10</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('whole-preorder', -1)">−</button>
+          <div class="qty-value" id="qty-whole-preorder">0</div>
+          <button class="qty-btn" onclick="changeQty('whole-preorder', 1)">+</button>
         </div>
       </div>
     </div>
@@ -886,10 +963,11 @@
 
     <div class="menu-item" data-id="croissants" data-price="12">
       <div class="item-info">
-        <div class="item-name">Sourdough Croissants</div>
-        <div class="item-desc">Buttery, flaky, laminated with sourdough tang — sold by the half dozen. <strong>Requires 24-hour advance notice.</strong></div>
+        <div class="item-name">Sourdough Croissants <span class="preorder-label">Pre-Order</span></div>
+        <div class="item-desc">Buttery, flaky, laminated with sourdough tang — sold by the half dozen.</div>
         <div class="item-weight">6 ct · Bread flour, sourdough starter, European-style butter, granulated sugar, salt, whole milk, water, egg</div>
         <div class="item-allergen">Allergens: Wheat, Milk, Egg</div>
+        <div class="preorder-notice">📅 Minimum 48 hours notice required</div>
       </div>
       <div class="item-right">
         <div class="item-price">$12</div>
@@ -1012,48 +1090,50 @@
     const badge = document.getElementById('avail-badge');
     const desc = document.getElementById('avail-desc');
     const link = document.getElementById('avail-link');
+    const qtyControl = document.getElementById('daily-whole-qty-control');
+    const outOfStock = document.getElementById('out-of-stock-whole');
+    const tag = document.getElementById('daily-tag-whole');
 
     if (n <= 0) {
       dot.className = 'availability-dot red';
       badge.textContent = 'Sold Out Today';
       badge.className = 'availability-count-badge sold-out';
-      desc.textContent = 'Today\'s loaves are sold out — but you can still pre-order! Add a whole loaf below and select a future pickup date.';
-      link.textContent = 'Pre-order for a future date →';
+      desc.textContent = "Today's loaves are all spoken for — use the Pre-Order below to pick a future date!";
+      link.textContent = 'Pre-order a future date →';
+      link.href = '#whole-loaf-preorder';
       link.style.display = 'inline-block';
+      // Disable daily bake product
+      qtyControl.style.display = 'none';
+      outOfStock.style.display = 'inline-block';
+      tag.textContent = 'Out of Stock Today';
+      tag.className = 'daily-tag sold-out-tag';
+      tag.style.display = 'inline-block';
     } else {
       dot.className = 'availability-dot green';
       badge.textContent = n === 1 ? '1 Bake Available Today' : `${n} Bakes Available Today`;
       badge.className = 'availability-count-badge';
       desc.textContent = n === 1
-        ? 'Only 1 fresh bake left today — order now to claim it before it\'s gone!'
-        : `${n} fresh bakes are ready for pickup today. Order now to claim yours — first come, first served!`;
+        ? 'Only 1 fresh bake left today — order now to claim it!'
+        : `${n} fresh bakes ready for pickup today. First come, first served!`;
       link.textContent = 'Order now →';
+      link.href = '#whole-loaf-daily';
       link.style.display = 'inline-block';
+      qtyControl.style.display = 'flex';
+      outOfStock.style.display = 'none';
+      tag.textContent = 'Available Today';
+      tag.className = 'daily-tag';
+      tag.style.display = 'inline-block';
     }
-
-    // Update daily-tag on relevant menu items
-    DAILY_BAKE_ITEMS.forEach(id => {
-      const tag = document.getElementById('daily-tag-' + id);
-      if (!tag) return;
-      if (n <= 0) {
-        tag.textContent = 'Pre-Order Available';
-        tag.className = 'daily-tag';
-        tag.style.display = 'inline-block';
-      } else {
-        tag.textContent = 'Available Today';
-        tag.className = 'daily-tag';
-        tag.style.display = 'inline-block';
-      }
-    });
   }
 
   renderAvailabilityBanner();
 
   // ---- CART STATE ----
-  const cart = { whole: 0, half: 0, bowls: 0, 'bagels-plain': 0, 'bagels-everything': 0, pizza: 0, croissants: 0 };
-  const prices = { whole: 10, half: 7, bowls: 10, 'bagels-plain': 10, 'bagels-everything': 10, pizza: 8, croissants: 12 };
+  const cart = { whole: 0, 'whole-preorder': 0, half: 0, bowls: 0, 'bagels-plain': 0, 'bagels-everything': 0, pizza: 0, croissants: 0 };
+  const prices = { whole: 10, 'whole-preorder': 10, half: 7, bowls: 10, 'bagels-plain': 10, 'bagels-everything': 10, pizza: 8, croissants: 12 };
   const names = {
-    whole: 'Sourdough Loaf — Whole',
+    whole: 'Sourdough Loaf — Whole (Daily Bake)',
+    'whole-preorder': 'Sourdough Loaf — Whole (Pre-Order)',
     half: 'Sourdough Loaf — Half',
     bowls: 'Sourdough Bowls (4)',
     'bagels-plain': 'Bagels — Plain (6ct)',
@@ -1061,6 +1141,9 @@
     pizza: 'Pizza Dough',
     croissants: 'Sourdough Croissants (6ct)'
   };
+
+  // Which items need 48hr notice (croissants), everything else is 24hr
+  const NOTICE_48HR = ['croissants'];
 
   const discountCodes = {
     'HERO50':    { percent: 50, label: 'Military / First Responder (50% off)' },
@@ -1087,25 +1170,34 @@
     updateCart();
   }
 
-  // How many daily-bake items are currently in cart
   function dailyBakesInCart() {
     return DAILY_BAKE_ITEMS.reduce((sum, id) => sum + cart[id], 0);
   }
 
-  function changeQty(id, delta) {
-    const isDailyItem = DAILY_BAKE_ITEMS.includes(id);
+  // Returns minimum days out required based on current cart contents
+  function getMinDaysRequired() {
+    const has48 = NOTICE_48HR.some(id => cart[id] > 0);
+    return has48 ? 2 : 1;
+  }
 
-    if (delta > 0 && isDailyItem && DAILY_BAKES_AVAILABLE > 0) {
-      // Only enforce limit when there ARE loaves today — sold out = pre-order freely
+  function changeQty(id, delta) {
+    // Enforce daily bake limit
+    if (delta > 0 && id === 'whole' && DAILY_BAKES_AVAILABLE > 0) {
       if (dailyBakesInCart() >= DAILY_BAKES_AVAILABLE) {
-        alert(`Only ${DAILY_BAKES_AVAILABLE} loaf${DAILY_BAKES_AVAILABLE === 1 ? '' : 'ves'} available today. Select a future pickup date below to pre-order more!`);
+        alert(`Only ${DAILY_BAKES_AVAILABLE} loaf${DAILY_BAKES_AVAILABLE === 1 ? '' : 'ves'} available today. Use the Pre-Order option below to select a future date!`);
         return;
       }
+    }
+    // Block daily bake if sold out
+    if (delta > 0 && id === 'whole' && DAILY_BAKES_AVAILABLE <= 0) {
+      alert("Today's loaves are sold out. Please use the Pre-Order option below!");
+      return;
     }
 
     cart[id] = Math.max(0, cart[id] + delta);
     document.getElementById('qty-' + id).textContent = cart[id];
     updateCart();
+    populatePickupDates(); // Rebuild date picker based on new cart
   }
 
   function updateCart() {
@@ -1131,7 +1223,7 @@
       }
     }
 
-    const discountableItems = ['whole', 'bagels-plain', 'bagels-everything'];
+    const discountableItems = ['whole', 'whole-preorder', 'bagels-plain', 'bagels-everything'];
     let total = subtotal;
     if (activeDiscount && hasItems) {
       let discountableSubtotal = 0;
@@ -1153,18 +1245,31 @@
     submitBtn.disabled = !hasItems;
   }
 
-  // ---- PICKUP DATES ----
+  // ---- PICKUP DATES — smart minimum based on cart ----
   function populatePickupDates() {
     const select = document.getElementById('pickup-date');
+    const prevValue = select.value;
+    const minDays = getMinDaysRequired();
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const today = new Date();
-    for (let i = 2; i <= 14; i++) {
+
+    // Clear existing options except placeholder
+    while (select.options.length > 1) select.remove(1);
+
+    // Update placeholder text to reflect minimum
+    select.options[0].textContent = minDays === 2
+      ? 'Select a day... (48hr min for croissants)'
+      : 'Select a day...';
+
+    for (let i = minDays; i <= 14; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
       const opt = document.createElement('option');
       opt.value = d.toISOString().split('T')[0];
       opt.textContent = `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}`;
+      // Restore previously selected value if still valid
+      if (opt.value === prevValue) opt.selected = true;
       select.appendChild(opt);
     }
   }
