@@ -562,24 +562,8 @@
     Every loaf, every batch — made with care and baked by hand right here in Traverse City.
   </p>
 
-  <!-- Upload area -->
-  <div class="upload-area" id="upload-area">
-    <input type="file" id="file-input" accept="image/*" multiple>
-    <svg class="upload-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="3" width="18" height="18" rx="2"/>
-      <circle cx="8.5" cy="8.5" r="1.5"/>
-      <polyline points="21 15 16 10 5 21"/>
-    </svg>
-    <div class="upload-title">Add Photos</div>
-    <div class="upload-hint">Drag &amp; drop or click to select — any number of images</div>
-  </div>
-
   <!-- Grid -->
   <div class="gallery-grid" id="gallery-grid"></div>
-  <div class="gallery-empty" id="gallery-empty">
-    <span class="gallery-empty-label">No photos yet</span>
-    Use the area above to add your product photos — they'll appear here in a beautiful grid.
-  </div>
 </div>
 
 <!-- ============================================================
@@ -592,7 +576,6 @@
     <img id="lb-img" src="" alt="">
     <button class="lightbox-nav" id="lb-next" onclick="lightboxNav(1)">&#8594;</button>
   </div>
-  <input class="caption-bar" id="lb-caption" type="text" placeholder="Add a caption…" oninput="saveCaption()">
   <div class="lightbox-counter" id="lb-counter"></div>
 </div>
 
@@ -608,7 +591,7 @@
   <div style="margin-top: 20px;"></div>
   <div class="footer-name" style="font-size: 0.75em;">Contact Information:</div>
   <div class="footer-address" style="font-size: 0.75em;">
-    dagelijksbroodsourdough@gmail.com<br>
+    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="debabfb9bbb2b7b4b5adbcacb1b1baadb1abacbab1abb9b69eb9b3bfb7b2f0bdb1b3">[email&#160;protected]</a><br>
     <a href="https://www.instagram.com/dagelijksbrood_sourdough" target="_blank"
        style="color: var(--text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -627,99 +610,41 @@
 </footer>
 
 <script>
-  // ---- STATE ----
-  let images = []; // { src, caption, name }
+  // ============================================================
+  // PHOTO LIST — add or remove filenames here whenever you
+  // upload new photos to the gallery-images/ folder on GitHub.
+  // ============================================================
+  const images = [
+    "gallery-images/bagel_balls.webp",
+    "gallery-images/baguettes_flowers_pr.webp",
+    "gallery-images/before_scoring.webp",
+    "gallery-images/close_up_loaf.webp",
+    "gallery-images/croissants.webp",
+    "gallery-images/four_loaves.webp",
+    "gallery-images/full_bread_croissants.webp",
+    "gallery-images/full_brick.webp",
+    "gallery-images/packaging.webp",
+    "gallery-images/two_loaves_pr.webp",
+    "gallery-images/two_loaves_rustic_pr.webp",
+  ];
+
   let lightboxIndex = 0;
-
-  // ---- LOAD from localStorage ----
-  function loadSaved() {
-    try {
-      const saved = localStorage.getItem('db_gallery');
-      if (saved) images = JSON.parse(saved);
-    } catch(e) {}
-    renderGrid();
-  }
-
-  function saveAll() {
-    try { localStorage.setItem('db_gallery', JSON.stringify(images)); } catch(e) {}
-  }
-
-  // ---- FILE INPUT ----
-  const fileInput = document.getElementById('file-input');
-  const uploadArea = document.getElementById('upload-area');
-
-  fileInput.addEventListener('change', e => handleFiles(e.target.files));
-
-  uploadArea.addEventListener('dragover', e => {
-    e.preventDefault();
-    uploadArea.classList.add('drag-over');
-  });
-
-  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
-
-  uploadArea.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-    handleFiles(e.dataTransfer.files);
-  });
-
-  function handleFiles(files) {
-    const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
-    if (!arr.length) return;
-    let loaded = 0;
-    arr.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        images.push({ src: e.target.result, caption: '', name: file.name });
-        loaded++;
-        if (loaded === arr.length) {
-          saveAll();
-          renderGrid();
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-    // Reset input so same files can be re-added if needed
-    fileInput.value = '';
-  }
 
   // ---- RENDER GRID ----
   function renderGrid() {
     const grid = document.getElementById('gallery-grid');
-    const empty = document.getElementById('gallery-empty');
     grid.innerHTML = '';
-
-    if (!images.length) {
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    images.forEach((img, i) => {
+    images.forEach((src, i) => {
       const item = document.createElement('div');
       item.className = 'gallery-item';
       item.style.animationDelay = (i * 0.04) + 's';
       item.innerHTML = `
-        <img src="${img.src}" alt="${img.caption || img.name}" loading="lazy">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-label">${img.caption || ''}</div>
-        </div>
-        <button class="delete-btn" title="Remove photo" onclick="deleteImage(event, ${i})">✕</button>
+        <img src="${src}" alt="Dagelijks Brood — product photo ${i + 1}" loading="lazy">
+        <div class="gallery-item-overlay"></div>
       `;
-      item.addEventListener('click', e => {
-        if (e.target.classList.contains('delete-btn')) return;
-        openLightbox(i);
-      });
+      item.addEventListener('click', () => openLightbox(i));
       grid.appendChild(item);
     });
-  }
-
-  function deleteImage(e, i) {
-    e.stopPropagation();
-    if (!confirm('Remove this photo?')) return;
-    images.splice(i, 1);
-    saveAll();
-    renderGrid();
   }
 
   // ---- LIGHTBOX ----
@@ -741,19 +666,10 @@
   }
 
   function updateLightbox() {
-    const img = images[lightboxIndex];
-    document.getElementById('lb-img').src = img.src;
-    document.getElementById('lb-img').alt = img.caption || img.name;
-    document.getElementById('lb-caption').value = img.caption || '';
+    document.getElementById('lb-img').src = images[lightboxIndex];
     document.getElementById('lb-counter').textContent = `${lightboxIndex + 1} / ${images.length}`;
     document.getElementById('lb-prev').style.visibility = images.length > 1 ? 'visible' : 'hidden';
     document.getElementById('lb-next').style.visibility = images.length > 1 ? 'visible' : 'hidden';
-  }
-
-  function saveCaption() {
-    images[lightboxIndex].caption = document.getElementById('lb-caption').value;
-    saveAll();
-    renderGrid();
   }
 
   // Close lightbox on background click
@@ -763,14 +679,4 @@
 
   // Keyboard navigation
   document.addEventListener('keydown', e => {
-    if (!document.getElementById('lightbox').classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') lightboxNav(-1);
-    if (e.key === 'ArrowRight') lightboxNav(1);
-  });
-
-  // ---- INIT ----
-  loadSaved();
-</script>
-</body>
-</html>
+    if (!document.getElementById('lightbox').c
