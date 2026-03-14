@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Gallery — Dagelijks Brood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Josefin+Sans:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --stone: #d4cec4;
+    --wheat: #c4a96a;
+    --wheat-light: #e8d9b0;
+    --text-secondary: #6b6560;
+    --border: #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--warm-white);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    text-align: center;
+    padding: 60px 24px 40px;
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+    background: var(--warm-white);
+    animation: fadeUp 0.8s ease-out;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 0 auto 24px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .logo-name {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: clamp(36px, 8vw, 64px);
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: var(--ink);
+    display: block;
+  }
+
+  .logo-wheat {
+    display: block;
+    margin: 16px auto;
+    width: 48px;
+    height: auto;
+    opacity: 0.7;
+  }
+
+  .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+  }
+
+  .cottage-notice {
+    margin-top: 24px;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-family: 'Josefin Sans', sans-serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border: 1px solid var(--stone);
+    display: inline-block;
+    line-height: 1.6;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    text-align: center;
+    padding: 16px 24px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--ink);
+    background: var(--warm-white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav a {
+    color: var(--ink);
+    text-decoration: none;
+    margin: 0 20px;
+    padding: 4px 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: var(--ink);
+    transition: width 0.3s;
+  }
+
+  nav a:hover::after { width: 100%; }
+  nav a.active::after { width: 100%; }
+
+  /* ---- GALLERY SECTION ---- */
+  .gallery-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    animation: fadeUp 0.8s ease-out 0.1s both;
+  }
+
+  .section-title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .section-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+
+  .divider {
+    width: 60px; height: 1px;
+    background: var(--ink);
+    margin: 0 auto 16px;
+  }
+
+  .gallery-intro {
+    font-size: 17px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    max-width: 500px;
+    margin: 0 auto 48px;
+    line-height: 1.9;
+  }
+
+  /* ---- UPLOAD AREA ---- */
+  .upload-area {
+    border: 2px dashed var(--stone);
+    padding: 40px 24px;
+    text-align: center;
+    margin-bottom: 48px;
+    background: var(--cream);
+    transition: border-color 0.3s, background 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .upload-area:hover, .upload-area.drag-over {
+    border-color: var(--ink);
+    background: var(--wheat-light);
+  }
+
+  .upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon {
+    display: block;
+    margin: 0 auto 16px;
+    opacity: 0.4;
+  }
+
+  .upload-title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .upload-hint {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* ---- GALLERY GRID ---- */
+  .gallery-grid {
+    columns: 3;
+    column-gap: 16px;
+    gap: 16px;
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--stone);
+    background: var(--cream);
+    transition: border-color 0.3s;
+  }
+
+  .gallery-item:hover {
+    border-color: var(--ink);
+  }
+
+  .gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease, opacity 0.3s;
+    object-fit: cover;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.03);
+    opacity: 0.92;
+  }
+
+  .gallery-item-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(26,26,26,0.75));
+    padding: 32px 16px 14px;
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+
+  .gallery-item:hover .gallery-item-overlay {
+    opacity: 1;
+  }
+
+  .gallery-item-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #faf8f4;
+  }
+
+  /* Delete button */
+  .delete-btn {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 28px; height: 28px;
+    background: rgba(26,26,26,0.75);
+    border: none;
+    color: #faf8f4;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+
+  .gallery-item:hover .delete-btn {
+    display: flex;
+  }
+
+  .delete-btn:hover {
+    background: rgba(139, 64, 64, 0.9);
+  }
+
+  /* ---- EMPTY STATE ---- */
+  .gallery-empty {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 18px;
+    border: 1px solid var(--stone);
+    background: var(--cream);
+  }
+
+  .gallery-empty-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  /* ---- LIGHTBOX ---- */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.93);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox-inner {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .lightbox img {
+    max-width: 80vw;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 24px; right: 28px;
+    background: none;
+    border: none;
+    color: #faf8f4;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .lightbox-close:hover { opacity: 1; }
+
+  .lightbox-nav {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #faf8f4;
+    width: 44px; height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  .lightbox-counter {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ---- CAPTION EDITOR ---- */
+  .caption-bar {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: #faf8f4;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    text-align: center;
+    width: 400px;
+    max-width: 80vw;
+    outline: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 8px;
+    background: transparent;
+  }
+
+  .caption-bar::placeholder { color: rgba(255,255,255,0.3); }
+
+  /* ---- FOOTER ---- */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--ink);
+  }
+
+  .footer-name {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .footer-address { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+
+  .footer-cottage {
+    margin-top: 20px;
+    font-size: 11px;
+    font-family: 'Josefin Sans', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+  }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .gallery-item {
+    animation: fadeUp 0.5s ease-out both;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    .gallery-grid { columns: 2; }
+    nav a { margin: 0 12px; font-size: 11px; letter-spacing: 2px; }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid { columns: 1; }
+    header { padding: 40px 20px 32px; }
+    .logo-name { letter-spacing: 3px; }
+    .tagline { font-size: 18px; }
+    .lightbox img { max-width: 95vw; }
+    .lightbox-nav { display: none; }
+  }
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZVHJSRC12E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZVHJSRC12E');
+</script>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header>
+  <div class="header-top">
+    <span>Hand Made</span>
+    <span>Small Batch</span>
+  </div>
+  <a href="index.html" class="logo-name">Dagelijks Brood</a>
+  <svg class="logo-wheat" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#1a1a1a" stroke-width="1.2" fill="none">
+      <line x1="50" y1="135" x2="50" y2="20"/>
+      <ellipse cx="50" cy="20" rx="6" ry="14" transform="rotate(0 50 20)"/>
+      <ellipse cx="38" cy="38" rx="5" ry="12" transform="rotate(-20 38 38)"/>
+      <ellipse cx="62" cy="38" rx="5" ry="12" transform="rotate(20 62 38)"/>
+      <ellipse cx="35" cy="58" rx="5" ry="11" transform="rotate(-25 35 58)"/>
+      <ellipse cx="65" cy="58" rx="5" ry="11" transform="rotate(25 65 58)"/>
+      <ellipse cx="38" cy="78" rx="4" ry="10" transform="rotate(-20 38 78)"/>
+      <ellipse cx="62" cy="78" rx="4" ry="10" transform="rotate(20 62 78)"/>
+      <line x1="50" y1="30" x2="38" y2="42"/>
+      <line x1="50" y1="30" x2="62" y2="42"/>
+      <line x1="50" y1="50" x2="36" y2="62"/>
+      <line x1="50" y1="50" x2="64" y2="62"/>
+      <line x1="50" y1="70" x2="39" y2="82"/>
+      <line x1="50" y1="70" x2="61" y2="82"/>
+    </g>
+  </svg>
+  <p class="tagline">Daily Bread</p>
+  <div class="cottage-notice">
+    Made in a home kitchen · Traverse City, MI<br>
+    Not inspected by Michigan Dept. of Agriculture &amp; Rural Development
+  </div>
+</header>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav>
+  <a href="index.html#about">About</a>
+  <a href="about.html">My Story</a>
+  <a href="index.html#menu">Menu</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="index.html#order">Order</a>
+</nav>
+
+<!-- ============================================================
+     GALLERY SECTION
+     ============================================================ -->
+<div class="gallery-section">
+  <p class="section-title">Gallery</p>
+  <p class="section-subtitle">Fresh from the Oven</p>
+  <div class="divider"></div>
+  <p class="gallery-intro">
+    Every loaf, every batch — made with care and baked by hand right here in Traverse City.
+  </p>
+
+  <!-- Upload area -->
+  <div class="upload-area" id="upload-area">
+    <input type="file" id="file-input" accept="image/*" multiple>
+    <svg class="upload-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <div class="upload-title">Add Photos</div>
+    <div class="upload-hint">Drag &amp; drop or click to select — any number of images</div>
+  </div>
+
+  <!-- Grid -->
+  <div class="gallery-grid" id="gallery-grid"></div>
+  <div class="gallery-empty" id="gallery-empty">
+    <span class="gallery-empty-label">No photos yet</span>
+    Use the area above to add your product photos — they'll appear here in a beautiful grid.
+  </div>
+</div>
+
+<!-- ============================================================
+     LIGHTBOX
+     ============================================================ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+  <div class="lightbox-inner">
+    <button class="lightbox-nav" id="lb-prev" onclick="lightboxNav(-1)">&#8592;</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lightbox-nav" id="lb-next" onclick="lightboxNav(1)">&#8594;</button>
+  </div>
+  <input class="caption-bar" id="lb-caption" type="text" placeholder="Add a caption…" oninput="saveCaption()">
+  <div class="lightbox-counter" id="lb-counter"></div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer-name">Dagelijks Brood</div>
+  <div class="footer-address">
+    9750 E Jennings Dr #108<br>
+    Traverse City, MI 49684
+  </div>
+  <div style="margin-top: 20px;"></div>
+  <div class="footer-name" style="font-size: 0.75em;">Contact Information:</div>
+  <div class="footer-address" style="font-size: 0.75em;">
+    dagelijksbroodsourdough@gmail.com<br>
+    <a href="https://www.instagram.com/dagelijksbrood_sourdough" target="_blank"
+       style="color: var(--text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      @dagelijksbrood_sourdough
+    </a>
+  </div>
+  <div class="footer-cottage">
+    Made in a home kitchen that has not been inspected by the
+    Michigan Department of Agriculture &amp; Rural Development.
+    Cottage food operation under Michigan's Cottage Food Law.
+  </div>
+</footer>
+
+<script>
+  // ---- STATE ----
+  let images = []; // { src, caption, name }
+  let lightboxIndex = 0;
+
+  // ---- LOAD from localStorage ----
+  function loadSaved() {
+    try {
+      const saved = localStorage.getItem('db_gallery');
+      if (saved) images = JSON.parse(saved);
+    } catch(e) {}
+    renderGrid();
+  }
+
+  function saveAll() {
+    try { localStorage.setItem('db_gallery', JSON.stringify(images)); } catch(e) {}
+  }
+
+  // ---- FILE INPUT ----
+  const fileInput = document.getElementById('file-input');
+  const uploadArea = document.getElementById('upload-area');
+
+  fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+  uploadArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+  });
+
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function handleFiles(files) {
+    const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!arr.length) return;
+    let loaded = 0;
+    arr.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        images.push({ src: e.target.result, caption: '', name: file.name });
+        loaded++;
+        if (loaded === arr.length) {
+          saveAll();
+          renderGrid();
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    // Reset input so same files can be re-added if needed
+    fileInput.value = '';
+  }
+
+  // ---- RENDER GRID ----
+  function renderGrid() {
+    const grid = document.getElementById('gallery-grid');
+    const empty = document.getElementById('gallery-empty');
+    grid.innerHTML = '';
+
+    if (!images.length) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    images.forEach((img, i) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.style.animationDelay = (i * 0.04) + 's';
+      item.innerHTML = `
+        <img src="${img.src}" alt="${img.caption || img.name}" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-item-label">${img.caption || ''}</div>
+        </div>
+        <button class="delete-btn" title="Remove photo" onclick="deleteImage(event, ${i})">✕</button>
+      `;
+      item.addEventListener('click', e => {
+        if (e.target.classList.contains('delete-btn')) return;
+        openLightbox(i);
+      });
+      grid.appendChild(item);
+    });
+  }
+
+  function deleteImage(e, i) {
+    e.stopPropagation();
+    if (!confirm('Remove this photo?')) return;
+    images.splice(i, 1);
+    saveAll();
+    renderGrid();
+  }
+
+  // ---- LIGHTBOX ----
+  function openLightbox(i) {
+    lightboxIndex = i;
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function lightboxNav(dir) {
+    lightboxIndex = (lightboxIndex + dir + images.length) % images.length;
+    updateLightbox();
+  }
+
+  function updateLightbox() {
+    const img = images[lightboxIndex];
+    document.getElementById('lb-img').src = img.src;
+    document.getElementById('lb-img').alt = img.caption || img.name;
+    document.getElementById('lb-caption').value = img.caption || '';
+    document.getElementById('lb-counter').textContent = `${lightboxIndex + 1} / ${images.length}`;
+    document.getElementById('lb-prev').style.visibility = images.length > 1 ? 'visible' : 'hidden';
+    document.getElementById('lb-next').style.visibility = images.length > 1 ? 'visible' : 'hidden';
+  }
+
+  function saveCaption() {
+    images[lightboxIndex].caption = document.getElementById('lb-caption').value;
+    saveAll();
+    renderGrid();
+  }
+
+  // Close lightbox on background click
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+  });
+
+  // ---- INIT ----
+  loadSaved();
+</script>
+</body>
+</html>
